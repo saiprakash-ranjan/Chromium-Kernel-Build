@@ -14,7 +14,7 @@ Build script for Chromium OS kernel with initrd on SDM845.
 
 ### Build and flash upstream kernel with initrd:
 
-1. `git clone https://github.com/saiprakash-ranjan/chrome-build.git`
+1. `git clone https://github.com/saiprakash-ranjan/Chromium-Kernel-Build.git`
 2. Change the kernel source path in `build_upstream.sh`
 3. Run the build script as `sh build_upstream.sh`
 4. It will build the kernel and copy vmlinuz to configs folder.
