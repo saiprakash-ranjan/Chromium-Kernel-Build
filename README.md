@@ -1,5 +1,5 @@
-# chrome-build
-Build script for Chromium OS on SDM845
+# Chromium-Kernel-Build
+Build script for Chromium OS kernel with initrd on SDM845.
 
 ## Getting Started
 
