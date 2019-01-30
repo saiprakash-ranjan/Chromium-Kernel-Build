@@ -1,0 +1,9 @@
+console=
+loglevel=7
+init=/sbin/init
+cros_secure
+oops=panic
+panic=-1
+earlyprintk=ttyMSM0,115200n8 console=tty1 console=ttyMSM0,115200n8
+earlycon=qcom_geni,0xa84000 cros_debug
+vt.global_cursor_default=0

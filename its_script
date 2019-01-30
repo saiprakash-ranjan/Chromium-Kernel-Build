@@ -1,0 +1,46 @@
+/dts-v1/;
+
+/ {
+description = "Chrome OS kernel image with one or more FDT blobs";
+#address-cells = <1>;
+
+images {
+kernel@1 {
+data = /incbin/("arch/arm64/boot/Image.lz4");
+type = "kernel_noload";
+arch = "arm64";
+os = "linux";
+compression = "lz4";
+load = <0>;
+entry = <0>;
+};
+fdt@1 {
+description = "sdm845-mtp.dtb";
+data = /incbin/("arch/arm64/boot/dts/qcom/sdm845-mtp.dtb");
+type = "flat_dt";
+arch = "arm64";
+compression = "none";
+hash@1 {
+algo = "sha1";
+};
+};
+ramdisk@1 {
+description = "initrd";
+data = /incbin/("initrd-chrome.img");
+type = "ramdisk";
+arch = "arm64";
+os = "linux";
+compression = "none";
+load = <0>;
+entry = <0>;
+};
+};
+configurations {
+default = "conf@1";
+conf@1 {
+kernel = "kernel@1";
+ramdisk = "ramdisk@1";
+fdt = "fdt@1";
+};
+};
+};
