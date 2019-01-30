@@ -21,6 +21,6 @@ Build script for Chromium OS kernel with initrd on SDM845.
 5. Then run vbutil script to flash the kernel to usb as below:
 6. Run `sh update_kernel.sh` to flash kernel onto usb.
 
-### Build and flash chrome kernel with initrd:
+### Build and flash chromium kernel with initrd:
 
 Follow same steps as for upstream kernel but use `build_chrome.sh` script instead.
