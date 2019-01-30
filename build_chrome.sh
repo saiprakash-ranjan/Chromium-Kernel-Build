@@ -29,8 +29,8 @@ compress_kernel() {
 cd $KERNEL
 export ARCH=arm64
 export CROSS_COMPILE=aarch64-linux-gnu-
-make olddefconfig
 ./chromeos/scripts/prepareconfig chromiumos-qualcomm
+make olddefconfig
 ./chromeos/scripts/kernelconfig olddefconfig
 make Image.gz -j16
 make dtbs -j16
