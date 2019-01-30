@@ -1,6 +1,6 @@
 #!/bin/sh
 
-KERNEL= linux-kernel # Specify your kernel source path
+KERNEL=linux-kernel # Specify your kernel source path
 if [ ! -d "$KERNEL" ]; then
   echo "Specify the kernel src path"
   exit 1
