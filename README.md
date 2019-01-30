@@ -18,8 +18,9 @@ Build script for Chromium OS kernel with initrd on SDM845.
 2. Change the kernel source path in `build_upstream.sh`
 3. Run the build script as `sh build_upstream.sh`
 4. It will build the kernel and copy vmlinuz to configs folder.
-5. Then run vbutil script to flash the kernel to usb as below:
-6. Run `sh update_kernel.sh` to flash kernel onto usb.
+5. You can use netboot by just loading this vmlinuz file over tftp or
+6. Run vbutil script to flash the kernel onto usb as below:
+7. Run `sh update_kernel.sh` to flash kernel onto usb.
 
 ### Build and flash chromium kernel with initrd:
 
