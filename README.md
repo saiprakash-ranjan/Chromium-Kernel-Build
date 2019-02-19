@@ -5,8 +5,6 @@ Build script for Chromium OS kernel with initrd on SDM845.
 
 ### Pre-requisites
 
-* Note (Only for chromium repo): Revert the commit a40c0124da7a (CHROMIUM: scripts: Account for clang in the kernel config scripts)
-  which forces us to use chroot based build and force clang as a compiler :(
 * lz4: Install lz4 using `sudo apt-get install liblz4-tool` or copy lz4 binary from this repo to `/usr/bin`.
 * dtc: Install dtc with `sudo apt-get install device-tree-compiler`.
 * mkimage: Copy mkimage from this repo to `/usr/bin`.
@@ -26,4 +24,6 @@ Build script for Chromium OS kernel with initrd on SDM845.
 
 ### Build and flash chromium kernel with initrd:
 
-Follow same steps as for upstream kernel but use `build_chrome.sh` script instead.
+* Revert the commit a40c0124da7a (CHROMIUM: scripts: Account for clang in the kernel config scripts)
+  which forces us to use chroot based build and force clang as a compiler :(
+* Then follow same steps as for upstream kernel but use `build_chrome.sh` script instead.
