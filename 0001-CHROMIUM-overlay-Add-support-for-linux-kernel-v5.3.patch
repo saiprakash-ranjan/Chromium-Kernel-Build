@@ -1,0 +1,214 @@
+From 9a3d9b629bd2356b9dcabc25e457b42a66f66bb3 Mon Sep 17 00:00:00 2001
+From: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Date: Wed, 14 Aug 2019 18:50:10 +0530
+Subject: [PATCH] CHROMIUM: overlay: Add support for linux kernel v5.3
+
+Change-Id: I83f9f05443cec491f5cd3de72afb62d5d9a38267
+Signed-off-by: Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+---
+ .../chromeos-kernel-5_3-9999.ebuild           | 25 +++++++++++++
+ .../files/chromeos-version.sh                 | 29 +++++++++++++++
+ sys-kernel/chromeos-kernel-5_3/metadata.xml   |  8 +++++
+ .../chromeos-kernel-5_3-9999.ebuild           | 25 +++++++++++++
+ .../files/chromeos-version.sh                 | 36 +++++++++++++++++++
+ .../chromeos-kernel-5_3/metadata.xml          |  8 +++++
+ virtual/linux-sources/linux-sources-1.ebuild  |  2 ++
+ 7 files changed, 133 insertions(+)
+ create mode 100644 sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+ create mode 100644 sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+ create mode 100644 sys-kernel/chromeos-kernel-5_3/metadata.xml
+ create mode 100644 sys-kernel/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+ create mode 100644 sys-kernel/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+ create mode 100644 sys-kernel/sys-kernel/chromeos-kernel-5_3/metadata.xml
+
+diff --git a/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild b/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+new file mode 100644
+index 00000000000..183148f5dd8
+--- /dev/null
++++ b/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+@@ -0,0 +1,25 @@
++# Copyright 2012 The Chromium OS Authors. All rights reserved.
++# Distributed under the terms of the GNU General Public License v2
++
++EAPI=5
++
++CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
++CROS_WORKON_LOCALNAME="kernel/v5.3"
++
++# This must be inherited *after* EGIT/CROS_WORKON variables defined
++inherit cros-workon cros-kernel2
++
++HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
++DESCRIPTION="Chrome OS Linux Kernel 5.3"
++KEYWORDS="~*"
++
++# Change the following (commented out) number to the next prime number
++# when you change "cros-kernel2.eclass" to work around http://crbug.com/220902
++#
++# NOTE: There's nothing magic keeping this number prime but you just need to
++# make _any_ change to this file.  ...so why not keep it prime?
++#
++# Don't forget to update the comment in _all_ chromeos-kernel-x_x-9999.ebuild
++# files (!!!)
++#
++# The coolest prime number is: 103
+diff --git a/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh b/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+new file mode 100644
+index 00000000000..31f4fe20149
+--- /dev/null
++++ b/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+@@ -0,0 +1,29 @@
++#!/bin/bash
++#
++# Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++#
++# This script is given one argument: the base of the source directory of
++# the package, and it prints a string on stdout with the numerical version
++# number for said repo.
++
++# If the script runs from a board overlay, add "_p1" to returned kernel version.
++SCRIPT=$(realpath "$0")
++OVERLAY_ROOT="$(dirname "${SCRIPT}")/../../.."
++OVERLAY_NAME=$(sed -n '/^repo-name *=/s:[^=]*= *::p' "${OVERLAY_ROOT}"/metadata/layout.conf)
++
++# Only after we've parsed $0 change directory in case $0 is relative.
++cd "$1" || exit
++
++suffix=""
++if [[ "${OVERLAY_NAME}" != "chromiumos" ]]; then
++    suffix="_p1"
++fi
++
++# Strip any .0 fix level from the version string.
++version=$(make kernelversion | sed -Ee 's/([0-9]*\.[0-9]*)\.0/\1/' -e s/-/_/g)
++
++if [[ -n "${version}" ]]; then
++    echo "${version}${suffix}"
++fi
+diff --git a/sys-kernel/chromeos-kernel-5_3/metadata.xml b/sys-kernel/chromeos-kernel-5_3/metadata.xml
+new file mode 100644
+index 00000000000..e3b088a54d7
+--- /dev/null
++++ b/sys-kernel/chromeos-kernel-5_3/metadata.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
++<pkgmetadata>
++<herd>kernel</herd>
++<upstream>
++  <remote-id type="cpe">cpe:/o:linux:linux_kernel</remote-id>
++</upstream>
++</pkgmetadata>
+diff --git a/sys-kernel/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild b/sys-kernel/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+new file mode 100644
+index 00000000000..d1997236d50
+--- /dev/null
++++ b/sys-kernel/sys-kernel/chromeos-kernel-5_3/chromeos-kernel-5_3-9999.ebuild
+@@ -0,0 +1,25 @@
++# Copyright 2017 The Chromium OS Authors. All rights reserved.
++# Distributed under the terms of the GNU General Public License v2
++
++EAPI=5
++
++CROS_WORKON_PROJECT="chromiumos/third_party/kernel"
++CROS_WORKON_LOCALNAME="kernel/v5.3"
++
++# This must be inherited *after* EGIT/CROS_WORKON variables defined
++inherit cros-workon cros-kernel2
++
++HOMEPAGE="https://www.chromium.org/chromium-os/chromiumos-design-docs/chromium-os-kernel"
++DESCRIPTION="Chrome OS Linux Kernel 5.3"
++KEYWORDS="~*"
++
++# Change the following (commented out) number to the next prime number
++# when you change "cros-kernel2.eclass" to work around http://crbug.com/220902
++#
++# NOTE: There's nothing magic keeping this number prime but you just need to
++# make _any_ change to this file.  ...so why not keep it prime?
++#
++# Don't forget to update the comment in _all_ chromeos-kernel-x_x-9999.ebuild
++# files (!!!)
++#
++# The coolest prime number is: 41
+diff --git a/sys-kernel/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh b/sys-kernel/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+new file mode 100644
+index 00000000000..da7fb6e27c8
+--- /dev/null
++++ b/sys-kernel/sys-kernel/chromeos-kernel-5_3/files/chromeos-version.sh
+@@ -0,0 +1,36 @@
++#!/bin/bash
++#
++# Copyright (c) 2012 The Chromium OS Authors. All rights reserved.
++# Use of this source code is governed by a BSD-style license that can be
++# found in the LICENSE file.
++#
++# This script is given one argument: the base of the source directory of
++# the package, and it prints a string on stdout with the numerical version
++# number for said repo.
++
++# Matching regexp for all known kernel release tags to date.
++GLOB="v[2-9].*[0-9]"
++PATTERN="^v[2-9](\.[0-9]+)+(-rc[0-9]+)?$"
++
++if [ ! -d "$1" ] ; then
++    exit
++fi
++
++cd "$1" || exit
++
++# If the script runs from a board overlay, add "_p1" to returned kernel version.
++SCRIPT=$(realpath "$0")
++OVERLAY_ROOT="$(dirname "${SCRIPT}")/../../.."
++OVERLAY_NAME=$(sed -n '/^repo-name *=/s:[^=]*= *::p' "${OVERLAY_ROOT}"/metadata/layout.conf)
++
++suffix=""
++if [[ "${OVERLAY_NAME}" != "chromiumos" ]]; then
++    suffix="_p1"
++fi
++
++version=$(git describe --match "${GLOB}" --abbrev=0 HEAD | egrep "${PATTERN}" |
++  sed s/v\\.*//g | sed s/-/_/g)
++
++if [[ -n "${version}" ]]; then
++    echo "${version}${suffix}"
++fi
+diff --git a/sys-kernel/sys-kernel/chromeos-kernel-5_3/metadata.xml b/sys-kernel/sys-kernel/chromeos-kernel-5_3/metadata.xml
+new file mode 100644
+index 00000000000..e3b088a54d7
+--- /dev/null
++++ b/sys-kernel/sys-kernel/chromeos-kernel-5_3/metadata.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
++<pkgmetadata>
++<herd>kernel</herd>
++<upstream>
++  <remote-id type="cpe">cpe:/o:linux:linux_kernel</remote-id>
++</upstream>
++</pkgmetadata>
+diff --git a/virtual/linux-sources/linux-sources-1.ebuild b/virtual/linux-sources/linux-sources-1.ebuild
+index 56042afea76..0df358fe9f8 100644
+--- a/virtual/linux-sources/linux-sources-1.ebuild
++++ b/virtual/linux-sources/linux-sources-1.ebuild
+@@ -18,6 +18,7 @@ IUSE_KERNEL_VERS=(
+ 	kernel-4_4
+ 	kernel-4_14
+ 	kernel-4_19
++	kernel-5_3
+ 	kernel-experimental
+ 	kernel-next
+ 	kernel-upstream-mainline
+@@ -34,6 +35,7 @@ RDEPEND="
+ 	kernel-4_4? ( sys-kernel/chromeos-kernel-4_4 )
+ 	kernel-4_14? ( sys-kernel/chromeos-kernel-4_14 )
+ 	kernel-4_19? ( sys-kernel/chromeos-kernel-4_19 )
++	kernel-5_3? ( sys-kernel/chromeos-kernel-5_3 )
+ 	kernel-experimental? ( sys-kernel/chromeos-kernel-experimental )
+ 	kernel-next? ( sys-kernel/chromeos-kernel-next )
+ 	kernel-upstream-mainline? ( sys-kernel/upstream-kernel-mainline )
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
